@@ -10,10 +10,10 @@ Para poder ejecutar o correr el proyecto se necesitan unos requisitos minimos lo
 * [Tener una version de Java 17 o mas](https://www.oracle.com/co/java/technologies/downloads/)
 
 ## La aplicacion cuenta con 4 clases las cuales son
-# MovieServer: La clase actúa como servidor para una aplicación web de consulta de información de películas.
-# APIRestMovies: Actúa como interfaz para realizar solicitudes a una API REST que proporciona información sobre películas.
-# Cache: Gestiona una caché de información de películas utilizando un ConcurrentHashMap.
-# Main: Tiene como propósito general iniciar la aplicación del servidor de películas.
+**MovieServer**: La clase actúa como servidor para una aplicación web de consulta de información de películas.
+**APIRestMovies**: Actúa como interfaz para realizar solicitudes a una API REST que proporciona información sobre películas.
+**Cache**: Gestiona una caché de información de películas utilizando un ConcurrentHashMap.
+**Main**: Tiene como propósito general iniciar la aplicación del servidor de películas.
 
 ### Corriendo el proyecto
 Para correr el proyecto se puede de dos formas:
@@ -41,6 +41,7 @@ Y al hacer la consulta debera aparecernos asi:
 Para Generar el JavaDoc en la consola en la carpeta Lab1 por consola ponemos el siguiente comando
 mvn site
 Este comando generara el JavaDoc y lo guardara en la carpeta site mas especificamente en esta direccion
+
 ## \Lab1-AREP\Lab1\target\site
 
 ## Autor
