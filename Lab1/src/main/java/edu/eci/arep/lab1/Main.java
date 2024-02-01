@@ -21,7 +21,7 @@ import java.io.IOException;
 /**
  * Clase principal para iniciar el servidor de películas.
  * 
- * @author Juan
+ * @author Juan Felipe Vivas
  */
 public class Main {
 
@@ -36,7 +36,6 @@ public class Main {
      * Método principal para iniciar la aplicación.
      * 
      * @param args argumentos para iniciar la aplicación
-     * @throws IOException si algo falla durante la ejecución
      */
     public static void main(String[] args) {
         try {
