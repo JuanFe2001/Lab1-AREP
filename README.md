@@ -19,7 +19,7 @@ Para poder ejecutar o correr el proyecto se necesitan unos requisitos minimos lo
 
 **Main**: Tiene como propósito general iniciar la aplicación del servidor de películas.
 
-## Clona el Repo
+## Clonar el Repositorio
 
 Lo primero que tienes que hacer para probar el proyecto para esto debes clonar este repositorio con el siguiente comando
  **git clone (URL del Repositorio)** 
