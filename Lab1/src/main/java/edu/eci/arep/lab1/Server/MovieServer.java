@@ -62,7 +62,7 @@ public class MovieServer {
                 }
             }
 
-            outputLine = (petition.startsWith("/film")) ? movieInfoStyled(petition.replace("/film?name=", "")) : mainPage();
+            outputLine = (petition.startsWith("/film")) ? movieInformation(petition.replace("/film?name=", "")) : homePage();
 
             out.println(outputLine);
             out.close();
@@ -103,52 +103,71 @@ public class MovieServer {
      * @param name el nombre de la película
      * @return una estructura HTML con información de la película y encabezados
      */
-    private static String movieInfoStyled(String name) {
-        try {
-            JsonObject resp = apf.searchMovie(name);
-            return "HTTP/1.1 200 OK\r\n" +
-                    "Content-Type:text/html; charset=utf-8\\r\\n" +
-                    "\r\n" 
-                    +"<!DOCTYPE html>\r\n" +
-                    "<html lang=\"en\">\r\n" +
-                    "\r\n" +
-                    "<head>\r\n" +
-                    "    <meta charset=\"UTF-8\">\r\n" +
-                    "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n" +
-                    "    <title>Movie</title>\r\n" +
-                    "    <style>\r\n" +
-                    "        * {\r\n" +
-                    "            margin: 0;\r\n" +
-                    "            padding: 0;\r\n" +
-                    "            align-items: center;\r\n" +
-                    "            justify-content: center;\r\n" +
-                    "            font-family: 'Jost', sans-serif;\r\n" +
-                    "        }\r\n" +
-                    "    </style>\r\n" +
-                    "</head>\r\n" +
-                    "\r\n" +
-                    "<body>\r\n" +
-                    "    <h1>Title:" + resp.get("Title") + "</h1>\r\n" +
-                    "    <img src=" + resp.get("Poster") + ">\r\n" +
-                    "    <h2>Director(s):" + resp.get("Director") + "</h2>\r\n" +
-                    "    <h2>Plot:" + resp.get("Plot") + "</h2>\r\n" +
-                    "</body>\r\n" +
-                    "\r\n" +
-                    "</html>";
-        } catch (Exception e) {
-            System.err.println("Error al procesar la película:");
-            e.printStackTrace();
-        }
+   private static String movieInformation(String name) {
+    try {
+        JsonObject resp = apf.searchMovie(name);
+        
+        String actors = resp.has("Actors") ? resp.get("Actors").getAsString() : "N/A";
+        String language = resp.has("Language") ? resp.get("Language").getAsString() : "N/A";
 
-        return null;
+        return "HTTP/1.1 200 OK\r\n"
+                + "Content-Type: text/html\r\n"
+                + "\r\n"
+                + "<!DOCTYPE html>\r\n"
+                + "<html>\r\n"
+                + "<head>\r\n"
+                + "    <title>Movie</title>\r\n"
+                + "    <meta charset=\"ISO-8859-1\">\r\n"
+                + "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n"
+                + "    <style>\r\n"
+                + "        .card{box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);max-width:500px;\r\n"
+                + "            margin:20px auto;padding:20px;border-radius:15px;\r\n"
+                + "            display:flex;background:#fff;align-items:center;}\r\n"
+                + "        .poster{width:150px;height:225px;margin-right:20px;border-radius:15px;}\r\n"
+                + "        .details{flex:1;display:flex;flex-direction:column;\r\n"
+                + "            justify-content:space-between;}\r\n"
+                + "        .title{font-size:1.5em;margin-bottom:10px;}\r\n"
+                + "        .info{margin-right:10px;display:flex;flex-direction:column}\r\n"
+                + "        .plot{font-style:italic;margin-bottom:10px;}\r\n"
+                + "    </style>\r\n"
+                + "</head>\r\n"
+                + "<body>\r\n"
+                + "    <div class=\"card\">\r\n"
+                + "        <img src=\"" + resp.get("Poster").getAsString() + "\" alt=\"Movie Poster\" class=\"poster\">\r\n"
+                + "        <div class=\"details\">\r\n"
+                + "            <h2 class=\"title\">" + resp.get("Title").getAsString() + "</h2>\r\n"
+                + "            <div class=\"info\">\r\n"
+                + "                <span>Released: " + resp.get("Released") + "</span>\r\n"
+                + "                <span>Genre: " + resp.get("Genre") + "</span>\r\n"
+                + "                <span>Director: " + resp.get("Director") + "</span>\r\n"
+                + "                <span>Actors: " + resp.get("Actors") + "</span>\r\n"
+                + "                <span>Language: " + resp.get("Language") + "</span>\r\n"
+                + "            </div>\r\n"
+                + "            <p class=\"plot\">" + resp.get("Plot") + "</p>\r\n"
+                + "                <a href=\"/\"><button>Limpiar</button></a>\r\n"
+                + "            </article>\r\n"
+                + "        </div>\r\n"
+                + "    </body>\r\n"
+                + "</html>";
+    } catch (Exception e) {
+        System.err.println("Error al procesar la película:");
+        e.printStackTrace();
     }
+    return null;
+}
+
+
+
+
+
+
 
     /**
      * Retorna la página HTML principal.
      * 
      * @return la página principal de la aplicación
      */
-    private static String mainPage() {
+    private static String homePage() {
         return "HTTP/1.1 200 OK\r\n" +
                 "Content-Type:text/html; charset=utf-8\\r\\n" +
                 "\r\n"

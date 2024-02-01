@@ -39,25 +39,43 @@ public class APIRestMovies {
      * @throws IOException si algo falla durante la solicitud
      * @return un JsonObject con todos los datos sobre la película
      */ 
-    public JsonObject searchMovie(String name) throws IOException {
-        if (cache.movieInCache(name)) {
+   public JsonObject searchMovie(String name) throws IOException {
+        if(cache.movieInCache(name)){
             return cache.getMovie(name);
         }
+        URL obj = new URL(MOVIE_URL+name);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("User-Agent", USER_AGENT);
 
-        String encodedName = URLEncoder.encode(name, StandardCharsets.UTF_8);
-        String apiUrl = MOVIE_URL + encodedName;
+        // JsonObject finalResponse = null;
 
-        try {
-            String jsonResponse = executeGetRequest(apiUrl);
-            JsonObject movieInfo = JsonParser.parseString(jsonResponse).getAsJsonObject();
+        // The following invocation perform the connection implicitly before getting the
+        // code
+        int responseCode = con.getResponseCode();
+        System.out.println("GET Response Code :: " + responseCode);
 
-            cache.addMovieToCache(name, movieInfo);
-            return movieInfo;
-        } catch (Exception e) {
-            // Manejar excepciones al convertir la respuesta a JSON
-            e.printStackTrace();
-            return null;  // O manejar de otra manera según tus necesidades
+        if (responseCode == HttpURLConnection.HTTP_OK) { // success
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+
+            // finalResponse = JsonParser.parseString(response.toString()).getAsJsonObject();
+
+            cache.addMovieToCache(name, JsonParser.parseString(response.toString()).getAsJsonObject());
+            // print result
+            System.out.println(response.toString());
+        } else {
+            System.out.println("no se pudo realizar la petición");
         }
+        return Cache.getInstance().getMovie(name);
     }
 
     private String executeGetRequest(String apiUrl) throws IOException {
